@@ -3,195 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Justificativas de Faltas</title>
+<title>EMEB Iranilde — Justificativas</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f0; color: #1a1a1a; font-size: 16px; }
-  #app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #f5f5f0; position: relative; }
+  #app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #f5f5f0; }
   .screen { display: none; min-height: 100vh; }
   .screen.active { display: block; }
 
+  /* ── Entrada ── */
+  .entrada-wrap { min-height: 100vh; display: flex; flex-direction: column; }
+  .entrada-hero { background: #0F6E56; padding: 48px 24px 40px; text-align: center; }
+  .entrada-hero .logo { width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .entrada-hero h1 { color: #fff; font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .entrada-hero p { color: #9FE1CB; font-size: 14px; }
+  .entrada-body { padding: 24px 16px; flex: 1; }
+  .entrada-label { font-size: 13px; font-weight: 600; color: #6b6b65; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center; }
+  .perfil-card { background: #fff; border: 0.5px solid #e0ded8; border-radius: 16px; padding: 20px; margin-bottom: 12px; cursor: pointer; display: flex; align-items: center; gap: 16px; -webkit-tap-highlight-color: transparent; transition: border-color .15s; }
+  .perfil-card:active { opacity: .75; }
+  .perfil-card:hover { border-color: #1D9E75; }
+  .perfil-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .perfil-icon.green { background: #E1F5EE; }
+  .perfil-icon.blue  { background: #E6F1FB; }
+  .perfil-info h3 { font-size: 17px; font-weight: 500; margin-bottom: 3px; }
+  .perfil-info p  { font-size: 13px; color: #6b6b65; }
+
+  /* ── Top bar ── */
   .top-bar { background: #0F6E56; color: #fff; padding: 16px; display: flex; align-items: center; gap: 12px; }
   .top-bar h1 { font-size: 17px; font-weight: 500; flex: 1; }
-  .btn-back { background: none; border: none; color: #fff; cursor: pointer; padding: 0; line-height: 1; display: flex; align-items: center; }
+  .btn-back { background: none; border: none; color: #fff; cursor: pointer; padding: 0; display: flex; align-items: center; }
+  .btn-trocar { background: none; border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; color: rgba(255,255,255,0.9); font-size: 12px; font-family: inherit; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
 
   .content { padding: 16px; }
-  .home-hero { background: #0F6E56; padding: 20px 16px 32px; }
-  .home-hero .school-name { color: #5DCAA5; font-size: 13px; margin-bottom: 4px; }
-  .home-hero h1 { color: #fff; font-size: 24px; font-weight: 500; }
-  .home-body { padding: 16px; margin-top: -12px; }
-  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .stat-box { background: #fff; border: 0.5px solid #e0ded8; border-radius: 12px; padding: 14px; }
-  .stat-num { font-size: 28px; font-weight: 600; color: #0F6E56; }
-  .stat-label { font-size: 12px; color: #6b6b65; margin-top: 2px; }
-  .menu-card { background: #fff; border: 0.5px solid #e0ded8; border-radius: 14px; padding: 18px; margin-bottom: 12px; cursor: pointer; display: flex; align-items: center; gap: 14px; -webkit-tap-highlight-color: transparent; }
-  .menu-card:active { opacity: 0.75; }
-  .menu-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .menu-icon.green { background: #E1F5EE; }
-  .menu-icon.blue { background: #E6F1FB; }
-  .menu-text h3 { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
-  .menu-text p { font-size: 13px; color: #6b6b65; }
 
-  .config-banner { background: #FFF3CD; border: 1px solid #F0C040; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: #7A5C00; display: none; }
-  .config-banner.show { display: block; }
-  .config-banner a { color: #0F6E56; font-weight: 500; cursor: pointer; text-decoration: underline; }
+  /* ── Registrar hero ── */
+  .reg-hero { background: #0F6E56; padding: 20px 16px 28px; }
+  .reg-hero .school { color: #9FE1CB; font-size: 13px; margin-bottom: 4px; }
+  .reg-hero h1 { color: #fff; font-size: 22px; font-weight: 500; }
+  .reg-body { padding: 16px; margin-top: -12px; }
 
+  /* ── Form ── */
   .form-section { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 0.5px solid #e0ded8; }
-  .form-section-title { font-size: 12px; font-weight: 600; color: #0F6E56; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .form-section-title { font-size: 12px; font-weight: 600; color: #0F6E56; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px; }
   .field { margin-bottom: 14px; }
   .field:last-child { margin-bottom: 0; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #444; margin-bottom: 6px; }
-  .field input, .field select, .field textarea {
-    width: 100%; padding: 11px 13px; font-size: 15px;
-    border: 1px solid #d8d6d0; border-radius: 10px;
-    background: #fafaf8; color: #1a1a1a; font-family: inherit;
-    -webkit-appearance: none; appearance: none;
-  }
+  .field input, .field select, .field textarea { width: 100%; padding: 11px 13px; font-size: 15px; border: 1px solid #d8d6d0; border-radius: 10px; background: #fafaf8; color: #1a1a1a; font-family: inherit; -webkit-appearance: none; appearance: none; }
   .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #1D9E75; background: #fff; }
   .field textarea { height: 80px; resize: none; line-height: 1.5; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
   /* ── Calendário ── */
   .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .cal-nav button { background: none; border: 1px solid #d8d6d0; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 18px; color: #444; }
-  .cal-month-label { font-size: 15px; font-weight: 500; color: #1a1a1a; }
-  .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 4px; }
+  .cal-nav button { background: none; border: 1px solid #d8d6d0; border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 18px; color: #444; }
+  .cal-month-label { font-size: 15px; font-weight: 500; }
+  .cal-weekdays { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-bottom: 4px; }
   .cal-weekday { text-align: center; font-size: 11px; font-weight: 600; color: #a0a09a; padding: 4px 0; text-transform: uppercase; }
-  .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .cal-day {
-    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-    font-size: 14px; border-radius: 8px; cursor: pointer;
-    border: 1px solid transparent; background: transparent;
-    -webkit-tap-highlight-color: transparent; transition: all 0.12s;
-    color: #1a1a1a;
-  }
-  .cal-day:hover { background: #f0faf5; }
-  .cal-day.empty { cursor: default; }
-  .cal-day.today { border-color: #1D9E75; font-weight: 600; color: #0F6E56; }
-  .cal-day.sel { background: #0F6E56; color: #fff; font-weight: 600; border-color: #0F6E56; }
-  .cal-day.sel.today { background: #0F6E56; color: #fff; }
-  .cal-day.other-month { color: #c8c6c0; }
-  .cal-selected-summary { margin-top: 10px; font-size: 13px; color: #0F6E56; font-weight: 500; min-height: 18px; }
+  .cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+  .cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:14px; border-radius:8px; cursor:pointer; border:1px solid transparent; background:transparent; -webkit-tap-highlight-color:transparent; transition:all .12s; color:#1a1a1a; }
+  .cal-day:hover { background:#f0faf5; }
+  .cal-day.empty { cursor:default; pointer-events:none; }
+  .cal-day.today { border-color:#1D9E75; font-weight:600; color:#0F6E56; }
+  .cal-day.sel { background:#0F6E56; color:#fff; font-weight:600; border-color:#0F6E56; }
+  .cal-summary { margin-top:10px; font-size:13px; min-height:18px; }
 
-  .atestado-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-  .atestado-btn {
-    padding: 12px; font-size: 14px; text-align: center;
-    border: 1.5px solid #d8d6d0; border-radius: 10px; cursor: pointer;
-    background: #fafaf8; color: #6b6b65; font-family: inherit;
-    transition: all 0.12s; -webkit-tap-highlight-color: transparent;
-  }
-  .atestado-btn.sel { border-color: #0F6E56; background: #E1F5EE; color: #085041; font-weight: 500; }
+  /* ── Atestado ── */
+  .atestado-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+  .atestado-btn { padding:12px; font-size:14px; text-align:center; border:1.5px solid #d8d6d0; border-radius:10px; cursor:pointer; background:#fafaf8; color:#6b6b65; font-family:inherit; transition:all .12s; -webkit-tap-highlight-color:transparent; }
+  .atestado-btn.sel { border-color:#0F6E56; background:#E1F5EE; color:#085041; font-weight:500; }
 
-  .canvas-wrap { border: 1.5px dashed #c8c6c0; border-radius: 10px; background: #fff; overflow: hidden; }
-  .sig-hint { text-align: center; font-size: 12px; color: #a0a09a; padding: 8px; border-bottom: 0.5px solid #eeede8; }
-  canvas { display: block; width: 100%; touch-action: none; cursor: crosshair; }
-  .canvas-actions { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-top: 0.5px solid #eeede8; }
-  .btn-clear { font-size: 13px; color: #e24b4a; cursor: pointer; background: none; border: none; padding: 4px; font-family: inherit; }
-  .sig-status { font-size: 12px; color: #1D9E75; display: none; }
-  .sig-status.show { display: block; }
+  /* ── Assinatura ── */
+  .canvas-wrap { border:1.5px dashed #c8c6c0; border-radius:10px; background:#fff; overflow:hidden; }
+  .sig-hint { text-align:center; font-size:12px; color:#a0a09a; padding:8px; border-bottom:0.5px solid #eeede8; }
+  canvas { display:block; width:100%; touch-action:none; cursor:crosshair; }
+  .canvas-actions { display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-top:0.5px solid #eeede8; }
+  .btn-clear { font-size:13px; color:#e24b4a; cursor:pointer; background:none; border:none; padding:4px; font-family:inherit; }
+  .sig-status { font-size:12px; color:#1D9E75; display:none; }
+  .sig-status.show { display:block; }
 
-  .btn-primary { width: 100%; padding: 15px; font-size: 16px; font-weight: 500; background: #0F6E56; color: #fff; border: none; border-radius: 12px; cursor: pointer; font-family: inherit; margin-top: 8px; -webkit-tap-highlight-color: transparent; }
-  .btn-primary:active { opacity: 0.85; }
-  .btn-primary:disabled { background: #b0b0a8; cursor: not-allowed; }
-  .btn-secondary { width: 100%; padding: 14px; font-size: 15px; font-weight: 500; background: #fff; color: #0F6E56; border: 1.5px solid #0F6E56; border-radius: 12px; cursor: pointer; font-family: inherit; margin-bottom: 10px; }
-  .form-error { color: #e24b4a; font-size: 13px; margin-bottom: 8px; display: none; }
-  .form-error.show { display: block; }
+  /* ── Botões ── */
+  .btn-primary { width:100%; padding:15px; font-size:16px; font-weight:500; background:#0F6E56; color:#fff; border:none; border-radius:12px; cursor:pointer; font-family:inherit; margin-top:8px; -webkit-tap-highlight-color:transparent; }
+  .btn-primary:active { opacity:.85; }
+  .btn-primary:disabled { background:#b0b0a8; cursor:not-allowed; }
+  .btn-secondary { width:100%; padding:14px; font-size:15px; font-weight:500; background:#fff; color:#0F6E56; border:1.5px solid #0F6E56; border-radius:12px; cursor:pointer; font-family:inherit; margin-bottom:10px; }
+  .form-error { color:#e24b4a; font-size:13px; margin-bottom:8px; display:none; }
+  .form-error.show { display:block; }
 
-  .loading { text-align: center; padding: 24px; color: #6b6b65; font-size: 14px; }
-  .spinner { width: 28px; height: 28px; border: 3px solid #e0ded8; border-top-color: #0F6E56; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 10px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  /* ── Sucesso ── */
+  .success-body { padding:40px 24px; text-align:center; }
+  .success-icon { width:72px; height:72px; background:#E1F5EE; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; color:#0F6E56; }
+  .success-body h2 { font-size:22px; font-weight:500; margin-bottom:8px; }
+  .success-body p { font-size:15px; color:#6b6b65; margin-bottom:32px; }
 
-  .success-body { padding: 40px 24px; text-align: center; }
-  .success-icon { width: 72px; height: 72px; background: #E1F5EE; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #0F6E56; }
-  .success-body h2 { font-size: 22px; font-weight: 500; margin-bottom: 8px; }
-  .success-body p { font-size: 15px; color: #6b6b65; margin-bottom: 32px; }
+  /* ── Consultar ── */
+  .filter-section { background:#fff; border:0.5px solid #e0ded8; border-radius:14px; padding:14px; margin-bottom:12px; }
+  .filter-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .filter-row select { padding:10px 12px; font-size:14px; border:1px solid #d8d6d0; border-radius:10px; background:#fafaf8; color:#1a1a1a; font-family:inherit; -webkit-appearance:none; appearance:none; width:100%; }
+  .record-card { background:#fff; border:0.5px solid #e0ded8; border-radius:14px; padding:14px; margin-bottom:10px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .record-card:active { opacity:.75; }
+  .record-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; gap:8px; }
+  .record-name { font-size:15px; font-weight:500; flex:1; }
+  .turma-badge { font-size:12px; padding:3px 10px; border-radius:20px; background:#E1F5EE; color:#085041; font-weight:500; white-space:nowrap; }
+  .record-meta { font-size:13px; color:#6b6b65; line-height:1.6; margin-bottom:8px; }
+  .badge { display:inline-block; font-size:11px; padding:3px 9px; border-radius:20px; font-weight:500; }
+  .badge-atestado { background:#E6F1FB; color:#0C447C; }
+  .badge-sem { background:#f1efe8; color:#5F5E5A; }
+  .empty-state { text-align:center; padding:48px 16px; color:#a0a09a; font-size:14px; }
+  .loading { text-align:center; padding:24px; color:#6b6b65; font-size:14px; }
+  .spinner { width:28px; height:28px; border:3px solid #e0ded8; border-top-color:#0F6E56; border-radius:50%; animation:spin .7s linear infinite; margin:0 auto 10px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  .filter-section { background: #fff; border: 0.5px solid #e0ded8; border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-  .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .filter-row select { padding: 10px 12px; font-size: 14px; border: 1px solid #d8d6d0; border-radius: 10px; background: #fafaf8; color: #1a1a1a; font-family: inherit; -webkit-appearance: none; appearance: none; width: 100%; }
-  .record-card { background: #fff; border: 0.5px solid #e0ded8; border-radius: 14px; padding: 14px; margin-bottom: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  .record-card:active { opacity: 0.75; }
-  .record-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
-  .record-name { font-size: 15px; font-weight: 500; flex: 1; }
-  .turma-badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: #E1F5EE; color: #085041; font-weight: 500; white-space: nowrap; }
-  .record-meta { font-size: 13px; color: #6b6b65; line-height: 1.6; margin-bottom: 8px; }
-  .badge { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 500; }
-  .badge-atestado { background: #E6F1FB; color: #0C447C; }
-  .badge-sem { background: #f1efe8; color: #5F5E5A; }
-  .empty-state { text-align: center; padding: 48px 16px; color: #a0a09a; font-size: 14px; }
-
-  .detail-card { background: #fff; border: 0.5px solid #e0ded8; border-radius: 14px; padding: 16px; margin-bottom: 14px; }
-  .detail-name { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-  .detail-date { font-size: 13px; color: #6b6b65; margin-bottom: 14px; }
-  .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid #eeede8; font-size: 14px; gap: 12px; }
-  .detail-row:last-child { border-bottom: none; }
-  .detail-label { color: #6b6b65; flex-shrink: 0; }
-  .detail-val { font-weight: 500; text-align: right; }
-  .sig-section-title { font-size: 13px; font-weight: 500; color: #444; margin-bottom: 8px; }
-  .sig-preview { border: 0.5px solid #e0ded8; border-radius: 10px; overflow: hidden; background: #fff; }
-  .sig-preview img { width: 100%; display: block; }
-  .no-sig { text-align: center; padding: 20px; color: #a0a09a; font-size: 13px; border: 1px dashed #d8d6d0; border-radius: 10px; }
-
-  .modal-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; min-height: 100vh; background: rgba(0,0,0,0.45); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; }
-  .modal-overlay.show { display: flex; }
-  .modal { background: #fff; border-radius: 16px; padding: 24px; width: 100%; max-width: 440px; }
-  .modal h2 { font-size: 18px; font-weight: 500; margin-bottom: 8px; }
-  .modal p { font-size: 14px; color: #6b6b65; margin-bottom: 16px; line-height: 1.6; }
-  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
-  .modal-actions button { flex: 1; padding: 12px; font-size: 14px; border-radius: 10px; cursor: pointer; font-family: inherit; font-weight: 500; }
-  .btn-cancel { background: #f5f5f0; border: none; color: #6b6b65; }
-  .btn-save-url { background: #0F6E56; border: none; color: #fff; }
+  /* ── Detalhe ── */
+  .detail-card { background:#fff; border:0.5px solid #e0ded8; border-radius:14px; padding:16px; margin-bottom:14px; }
+  .detail-name { font-size:20px; font-weight:500; margin-bottom:4px; }
+  .detail-date { font-size:13px; color:#6b6b65; margin-bottom:14px; }
+  .detail-row { display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:0.5px solid #eeede8; font-size:14px; gap:12px; }
+  .detail-row:last-child { border-bottom:none; }
+  .detail-label { color:#6b6b65; flex-shrink:0; }
+  .detail-val { font-weight:500; text-align:right; }
+  .sig-section-title { font-size:13px; font-weight:500; color:#444; margin-bottom:8px; }
+  .sig-preview { border:0.5px solid #e0ded8; border-radius:10px; overflow:hidden; background:#fff; }
+  .sig-preview img { width:100%; display:block; }
+  .no-sig { text-align:center; padding:20px; color:#a0a09a; font-size:13px; border:1px dashed #d8d6d0; border-radius:10px; }
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- HOME -->
-<div id="screen-home" class="screen active">
-  <div class="home-hero">
-    <p class="school-name" id="school-name-display">Escola Municipal</p>
-    <h1>Justificativas<br>de faltas</h1>
-  </div>
-  <div class="home-body">
-    <div id="config-banner" class="config-banner show">
-      Planilha não configurada.
-      <a onclick="abrirConfig()">Configurar agora</a> para salvar os dados.
-    </div>
-    <div class="stats-row">
-      <div class="stat-box"><div class="stat-num" id="stat-total">–</div><div class="stat-label">Registros este mês</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-atestado">–</div><div class="stat-label">Com atestado</div></div>
-    </div>
-    <div class="menu-card" onclick="go('screen-registrar')">
-      <div class="menu-icon green">
-        <svg width="24" height="24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+<!-- ══════ TELA DE ENTRADA ══════ -->
+<div id="screen-entrada" class="screen active">
+  <div class="entrada-wrap">
+    <div class="entrada-hero">
+      <div class="logo">
+        <svg width="32" height="32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19l8-14 8 14"/><path d="M9 12h6"/><rect x="16" y="13" width="8" height="7" rx="1"/></svg>
       </div>
-      <div class="menu-text"><h3>Registrar justificativa</h3><p>Nova falta com assinatura do responsável</p></div>
-      <svg width="20" height="20" fill="none" stroke="#b0aea8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+      <h1>EMEB Iranilde</h1>
+      <p>Justificativas de faltas</p>
     </div>
-    <div class="menu-card" onclick="irParaConsulta()">
-      <div class="menu-icon blue">
-        <svg width="24" height="24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <div class="entrada-body">
+      <div class="entrada-label">Quem é você?</div>
+      <div class="perfil-card" onclick="entrarComo('auxiliar')">
+        <div class="perfil-icon green">📋</div>
+        <div class="perfil-info">
+          <h3>Auxiliar de disciplina</h3>
+          <p>Registrar novas justificativas</p>
+        </div>
+        <svg width="20" height="20" fill="none" stroke="#b0aea8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-      <div class="menu-text"><h3>Consultar registros</h3><p>Filtrar por turma, mês ou aluno</p></div>
-      <svg width="20" height="20" fill="none" stroke="#b0aea8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="menu-card" onclick="abrirConfig()" style="opacity:0.7">
-      <div class="menu-icon" style="background:#f1efe8">
-        <svg width="24" height="24" fill="none" stroke="#5F5E5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <div class="perfil-card" onclick="entrarComo('professor')">
+        <div class="perfil-icon blue">👨‍🏫</div>
+        <div class="perfil-info">
+          <h3>Professor</h3>
+          <p>Consultar registros por turma</p>
+        </div>
+        <svg width="20" height="20" fill="none" stroke="#b0aea8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-      <div class="menu-text"><h3>Configurações</h3><p>URL da planilha e nome da escola</p></div>
-      <svg width="20" height="20" fill="none" stroke="#b0aea8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
   </div>
 </div>
 
-<!-- REGISTRAR -->
+<!-- ══════ AUXILIAR — REGISTRAR ══════ -->
 <div id="screen-registrar" class="screen">
   <div class="top-bar">
-    <button class="btn-back" onclick="go('screen-home')">
+    <button class="btn-back" onclick="go('screen-entrada')" aria-label="Voltar">
       <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <h1>Nova justificativa</h1>
+    <button class="btn-trocar" onclick="go('screen-entrada')">Trocar perfil</button>
   </div>
   <div class="content">
     <div class="form-section">
@@ -204,24 +181,12 @@
         <label>Turma *</label>
         <select id="f-turma">
           <option value="">Selecione a turma</option>
-          <optgroup label="1º ano">
-            <option>111</option><option>112</option><option>113</option><option>114</option>
-          </optgroup>
-          <optgroup label="2º ano — manhã">
-            <option>221</option><option>222</option><option>223</option>
-          </optgroup>
-          <optgroup label="3º ano">
-            <option>311</option><option>312</option>
-          </optgroup>
-          <optgroup label="3º ano — tarde">
-            <option>321</option><option>322</option>
-          </optgroup>
-          <optgroup label="4º ano">
-            <option>411</option><option>412</option><option>413</option>
-          </optgroup>
-          <optgroup label="5º ano">
-            <option>511</option><option>512</option><option>513</option><option>514</option>
-          </optgroup>
+          <optgroup label="1º ano"><option>111</option><option>112</option><option>113</option><option>114</option></optgroup>
+          <optgroup label="2º ano"><option>221</option><option>222</option><option>223</option></optgroup>
+          <optgroup label="3º ano — manhã"><option>311</option><option>312</option></optgroup>
+          <optgroup label="3º ano — tarde"><option>321</option><option>322</option></optgroup>
+          <optgroup label="4º ano"><option>411</option><option>412</option><option>413</option></optgroup>
+          <optgroup label="5º ano"><option>511</option><option>512</option><option>513</option><option>514</option></optgroup>
         </select>
       </div>
     </div>
@@ -240,7 +205,7 @@
         <div class="cal-weekday">Sáb</div>
       </div>
       <div class="cal-days" id="cal-days"></div>
-      <div class="cal-selected-summary" id="cal-summary"></div>
+      <div class="cal-summary" id="cal-summary"></div>
     </div>
 
     <div class="form-section">
@@ -275,7 +240,7 @@
   </div>
 </div>
 
-<!-- SUCESSO -->
+<!-- ══════ SUCESSO ══════ -->
 <div id="screen-sucesso" class="screen">
   <div class="top-bar"><h1>Registro salvo</h1></div>
   <div class="success-body">
@@ -285,17 +250,18 @@
     <h2>Justificativa registrada!</h2>
     <p>O registro foi salvo com sucesso na planilha da escola.</p>
     <button class="btn-secondary" onclick="go('screen-registrar'); resetForm()">+ Registrar outra justificativa</button>
-    <button class="btn-primary" onclick="go('screen-home'); carregarStats()">Voltar ao início</button>
+    <button class="btn-primary" onclick="go('screen-entrada')">Voltar ao início</button>
   </div>
 </div>
 
-<!-- CONSULTAR -->
+<!-- ══════ PROFESSOR — CONSULTAR ══════ -->
 <div id="screen-consultar" class="screen">
   <div class="top-bar">
-    <button class="btn-back" onclick="go('screen-home')">
+    <button class="btn-back" onclick="go('screen-entrada')" aria-label="Voltar">
       <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <h1>Consultar registros</h1>
+    <button class="btn-trocar" onclick="go('screen-entrada')">Trocar perfil</button>
   </div>
   <div class="content">
     <div class="filter-section">
@@ -321,10 +287,10 @@
   </div>
 </div>
 
-<!-- DETALHE -->
+<!-- ══════ DETALHE ══════ -->
 <div id="screen-detalhe" class="screen">
   <div class="top-bar">
-    <button class="btn-back" onclick="go('screen-consultar')">
+    <button class="btn-back" onclick="go('screen-consultar')" aria-label="Voltar">
       <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <h1>Detalhes</h1>
@@ -332,62 +298,40 @@
   <div class="content" id="detalhe-content"></div>
 </div>
 
-<!-- CONFIG MODAL -->
-<div class="modal-overlay" id="modal-config">
-  <div class="modal">
-    <h2>Configurar planilha</h2>
-    <p>Cole a URL gerada pelo Google Apps Script. Siga as instruções do arquivo <strong>LEIA-ME.txt</strong>.</p>
-    <div class="field"><label>URL do Apps Script</label><input type="url" id="input-api-url" placeholder="https://script.google.com/macros/s/..."></div>
-    <div class="field"><label>Nome da escola (opcional)</label><input type="text" id="input-school-name" placeholder="Ex: E.M. João Paulo II"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="fecharConfig()">Cancelar</button>
-      <button class="btn-save-url" onclick="salvarConfig()">Salvar</button>
-    </div>
-  </div>
 </div>
-
-</div>
-
 <script>
-var API_URL = localStorage.getItem('api_url') || '';
-var SCHOOL_NAME = localStorage.getItem('school_name') || 'Escola Municipal';
-var todosRegistros = [];
-var selectedDates = [];
-var atestado = '';
-var sigCanvas, sigCtx, drawing = false, lastX = 0, lastY = 0, hasSig = false;
+// ╔══════════════════════════════════════════════════════╗
+// ║  Substitua o texto abaixo pela URL do Apps Script   ║
+// ╚══════════════════════════════════════════════════════╝
+var API_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
 
-var calYear, calMonth;
 var MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var todosRegistros = [], selectedDates = [], atestado = '';
+var sigCanvas, sigCtx, drawing = false, lastX = 0, lastY = 0, hasSig = false;
+var calYear, calMonth;
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('school-name-display').textContent = SCHOOL_NAME;
-  if (API_URL) {
-    document.getElementById('config-banner').classList.remove('show');
-    carregarStats();
-  }
-  var hoje = new Date();
-  calYear = hoje.getFullYear();
-  calMonth = hoje.getMonth();
+  var h = new Date(); calYear = h.getFullYear(); calMonth = h.getMonth();
   renderCalendario();
   initCanvas();
 });
 
+function entrarComo(perfil) {
+  if (perfil === 'auxiliar') { go('screen-registrar'); }
+  else { go('screen-consultar'); carregarRegistros(); }
+}
+
 function go(id) {
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
-function irParaConsulta() {
-  go('screen-consultar');
-  carregarRegistros();
-}
-
-// ── Calendário ────────────────────────────────────────────
-function mudarMes(delta) {
-  calMonth += delta;
+// ── Calendário ─────────────────────────────────────────
+function mudarMes(d) {
+  calMonth += d;
   if (calMonth > 11) { calMonth = 0; calYear++; }
-  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
   renderCalendario();
 }
 
@@ -396,39 +340,22 @@ function renderCalendario() {
   var grid = document.getElementById('cal-days');
   grid.innerHTML = '';
   var hoje = new Date();
-  var primeiroDia = new Date(calYear, calMonth, 1).getDay();
-  var diasNoMes = new Date(calYear, calMonth + 1, 0).getDate();
-
-  for (var i = 0; i < primeiroDia; i++) {
-    var vazio = document.createElement('div');
-    vazio.className = 'cal-day empty';
-    grid.appendChild(vazio);
+  var inicio = new Date(calYear, calMonth, 1).getDay();
+  var total  = new Date(calYear, calMonth + 1, 0).getDate();
+  for (var i = 0; i < inicio; i++) {
+    var v = document.createElement('div'); v.className = 'cal-day empty'; grid.appendChild(v);
   }
-
-  for (var d = 1; d <= diasNoMes; d++) {
+  for (var d = 1; d <= total; d++) {
     var btn = document.createElement('div');
-    btn.className = 'cal-day';
-    btn.textContent = d;
-    var dataKey = calYear + '-' + String(calMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-    btn.dataset.key = dataKey;
-
-    if (hoje.getFullYear() === calYear && hoje.getMonth() === calMonth && hoje.getDate() === d) {
-      btn.classList.add('today');
-    }
-    if (selectedDates.indexOf(dataKey) !== -1) {
-      btn.classList.add('sel');
-    }
-
+    btn.className = 'cal-day'; btn.textContent = d;
+    var key = calYear + '-' + String(calMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    btn.dataset.key = key;
+    if (hoje.getFullYear()===calYear && hoje.getMonth()===calMonth && hoje.getDate()===d) btn.classList.add('today');
+    if (selectedDates.indexOf(key) !== -1) btn.classList.add('sel');
     btn.addEventListener('click', function() {
-      var key = this.dataset.key;
-      var idx = selectedDates.indexOf(key);
-      if (idx !== -1) {
-        selectedDates.splice(idx, 1);
-        this.classList.remove('sel');
-      } else {
-        selectedDates.push(key);
-        this.classList.add('sel');
-      }
+      var k = this.dataset.key, idx = selectedDates.indexOf(k);
+      if (idx !== -1) { selectedDates.splice(idx,1); this.classList.remove('sel'); }
+      else { selectedDates.push(k); this.classList.add('sel'); }
       atualizarResumo();
     });
     grid.appendChild(btn);
@@ -438,235 +365,146 @@ function renderCalendario() {
 
 function atualizarResumo() {
   var el = document.getElementById('cal-summary');
-  if (selectedDates.length === 0) {
-    el.textContent = 'Nenhum dia selecionado';
-    el.style.color = '#a0a09a';
-    return;
-  }
-  var sorted = selectedDates.slice().sort();
-  var labels = sorted.map(function(k) {
-    var parts = k.split('-');
-    return parseInt(parts[2]) + ' de ' + MESES[parseInt(parts[1])-1];
+  if (!selectedDates.length) { el.textContent = 'Nenhum dia selecionado'; el.style.color = '#a0a09a'; return; }
+  var labels = selectedDates.slice().sort().map(function(k) {
+    var p = k.split('-'); return parseInt(p[2]) + ' de ' + MESES[parseInt(p[1])-1];
   });
   el.style.color = '#0F6E56';
-  el.textContent = labels.length === 1
-    ? 'Ausente em: ' + labels[0]
-    : 'Ausente em: ' + labels.join(', ');
+  el.textContent = 'Ausente em: ' + labels.join(', ');
 }
 
-function formatarDatasParaSalvar(datas) {
-  return datas.slice().sort().map(function(k) {
-    var p = k.split('-');
-    return p[2] + '/' + p[1] + '/' + p[0];
+function formatarDatas(arr) {
+  return arr.slice().sort().map(function(k) {
+    var p = k.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
   }).join(', ');
 }
 
-// ── Atestado ──────────────────────────────────────────────
 function selAtestado(v) {
   atestado = v;
-  document.getElementById('btn-sim').classList.toggle('sel', v === 'sim');
-  document.getElementById('btn-nao').classList.toggle('sel', v === 'nao');
+  document.getElementById('btn-sim').classList.toggle('sel', v==='sim');
+  document.getElementById('btn-nao').classList.toggle('sel', v==='nao');
 }
 
-// ── Canvas ────────────────────────────────────────────────
+// ── Canvas ──────────────────────────────────────────────
 function initCanvas() {
   sigCanvas = document.getElementById('sig-canvas');
   if (!sigCanvas) return;
   sigCanvas.width = sigCanvas.offsetWidth || 440;
   sigCtx = sigCanvas.getContext('2d');
-  sigCtx.strokeStyle = '#1a1a1a';
-  sigCtx.lineWidth = 2.5;
-  sigCtx.lineCap = 'round';
-  sigCtx.lineJoin = 'round';
-
-  function getPos(e) {
-    var r = sigCanvas.getBoundingClientRect();
-    var scale = sigCanvas.width / r.width;
-    var src = e.touches ? e.touches[0] : e;
-    return { x: (src.clientX - r.left) * scale, y: (src.clientY - r.top) * scale };
+  sigCtx.strokeStyle = '#1a1a1a'; sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round';
+  function pos(e) {
+    var r = sigCanvas.getBoundingClientRect(), sc = sigCanvas.width/r.width;
+    var s = e.touches ? e.touches[0] : e;
+    return { x:(s.clientX-r.left)*sc, y:(s.clientY-r.top)*sc };
   }
-  sigCanvas.addEventListener('mousedown', function(e){ drawing=true; var p=getPos(e); lastX=p.x; lastY=p.y; });
+  sigCanvas.addEventListener('mousedown', function(e){ drawing=true; var p=pos(e); lastX=p.x; lastY=p.y; });
   sigCanvas.addEventListener('mousemove', function(e){
-    if(!drawing) return;
-    var p=getPos(e);
+    if(!drawing) return; var p=pos(e);
     sigCtx.beginPath(); sigCtx.moveTo(lastX,lastY); sigCtx.lineTo(p.x,p.y); sigCtx.stroke();
     lastX=p.x; lastY=p.y; hasSig=true;
     document.getElementById('sig-status').classList.add('show');
   });
   sigCanvas.addEventListener('mouseup', function(){ drawing=false; });
-  sigCanvas.addEventListener('touchstart', function(e){ e.preventDefault(); drawing=true; var p=getPos(e); lastX=p.x; lastY=p.y; }, {passive:false});
+  sigCanvas.addEventListener('touchstart', function(e){ e.preventDefault(); drawing=true; var p=pos(e); lastX=p.x; lastY=p.y; },{passive:false});
   sigCanvas.addEventListener('touchmove', function(e){
-    e.preventDefault();
-    if(!drawing) return;
-    var p=getPos(e);
+    e.preventDefault(); if(!drawing) return; var p=pos(e);
     sigCtx.beginPath(); sigCtx.moveTo(lastX,lastY); sigCtx.lineTo(p.x,p.y); sigCtx.stroke();
     lastX=p.x; lastY=p.y; hasSig=true;
     document.getElementById('sig-status').classList.add('show');
-  }, {passive:false});
+  },{passive:false});
   sigCanvas.addEventListener('touchend', function(){ drawing=false; });
 }
 
 function clearSig() {
   if(sigCtx) sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
-  hasSig=false;
-  document.getElementById('sig-status').classList.remove('show');
+  hasSig=false; document.getElementById('sig-status').classList.remove('show');
 }
 
-// ── Salvar ────────────────────────────────────────────────
+// ── Salvar ──────────────────────────────────────────────
 async function salvarRegistro() {
-  var nome = document.getElementById('f-nome').value.trim();
-  var turma = document.getElementById('f-turma').value;
+  var nome   = document.getElementById('f-nome').value.trim();
+  var turma  = document.getElementById('f-turma').value;
   var motivo = document.getElementById('f-motivo').value.trim();
-  var err = document.getElementById('form-error');
-
-  if (!nome || !turma || selectedDates.length === 0 || !motivo || !atestado) {
-    err.classList.add('show'); return;
-  }
+  var err    = document.getElementById('form-error');
+  if (!nome || !turma || !selectedDates.length || !motivo || !atestado) { err.classList.add('show'); return; }
   err.classList.remove('show');
-
-  var datasFormatadas = formatarDatasParaSalvar(selectedDates);
+  var diasFormatados = formatarDatas(selectedDates);
   var mes = MESES[parseInt(selectedDates[0].split('-')[1])-1];
   var assinatura = hasSig ? sigCanvas.toDataURL('image/png') : '';
-
-  var payload = {
-    action: 'salvar',
-    nome: nome,
-    turma: turma,
-    mes: mes,
-    dias: datasFormatadas,
-    motivo: motivo,
-    atestado: atestado,
-    assinatura: assinatura
-  };
-
+  var payload = { action:'salvar', nome, turma, mes, dias:diasFormatados, motivo, atestado, assinatura };
   var btn = document.getElementById('btn-salvar');
-  btn.disabled = true;
-  btn.textContent = 'Salvando...';
-
-  if (!API_URL) {
-    var local = JSON.parse(localStorage.getItem('registros_local') || '[]');
-    local.unshift(Object.assign({}, payload, { id: Date.now(), data: new Date().toLocaleDateString('pt-BR') }));
-    localStorage.setItem('registros_local', JSON.stringify(local));
-    btn.disabled = false; btn.textContent = 'Salvar registro';
-    go('screen-sucesso'); return;
-  }
-
+  btn.disabled=true; btn.textContent='Salvando...';
   try {
-    var res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+    var res = await fetch(API_URL, { method:'POST', body:JSON.stringify(payload) });
     var json = await res.json();
     if (json.ok) { go('screen-sucesso'); }
-    else { alert('Erro ao salvar: ' + (json.erro || 'Tente novamente.')); }
-  } catch(e) {
-    alert('Erro de conexão. Verifique a URL do Apps Script.');
-  }
-  btn.disabled = false; btn.textContent = 'Salvar registro';
+    else { alert('Erro ao salvar: '+(json.erro||'Tente novamente.')); }
+  } catch(e) { alert('Erro de conexão. Verifique se o Apps Script está publicado corretamente.'); }
+  btn.disabled=false; btn.textContent='Salvar registro';
 }
 
 function resetForm() {
-  document.getElementById('f-nome').value = '';
-  document.getElementById('f-turma').value = '';
-  document.getElementById('f-motivo').value = '';
+  document.getElementById('f-nome').value='';
+  document.getElementById('f-turma').value='';
+  document.getElementById('f-motivo').value='';
   document.getElementById('form-error').classList.remove('show');
   document.getElementById('btn-sim').classList.remove('sel');
   document.getElementById('btn-nao').classList.remove('sel');
-  selectedDates = []; atestado = '';
-  var hoje = new Date();
-  calYear = hoje.getFullYear(); calMonth = hoje.getMonth();
-  renderCalendario();
-  clearSig();
+  selectedDates=[]; atestado='';
+  var h=new Date(); calYear=h.getFullYear(); calMonth=h.getMonth();
+  renderCalendario(); clearSig();
 }
 
-// ── Stats ─────────────────────────────────────────────────
-async function carregarStats() {
-  if (!API_URL) return;
-  var mesAtual = MESES[new Date().getMonth()];
-  try {
-    var res = await fetch(API_URL + '?action=listar&mes=' + encodeURIComponent(mesAtual));
-    var json = await res.json();
-    if (json.ok) {
-      document.getElementById('stat-total').textContent = json.dados.length;
-      document.getElementById('stat-atestado').textContent = json.dados.filter(function(r){ return r.atestado==='sim'; }).length;
-    }
-  } catch(e) {}
-}
-
-// ── Consultar ─────────────────────────────────────────────
+// ── Consultar ───────────────────────────────────────────
 async function carregarRegistros() {
-  var container = document.getElementById('lista-container');
-  container.innerHTML = '<div class="loading"><div class="spinner"></div>Carregando registros...</div>';
-  if (!API_URL) {
-    todosRegistros = JSON.parse(localStorage.getItem('registros_local') || '[]');
-    renderLista(); return;
-  }
+  var c = document.getElementById('lista-container');
+  c.innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
   try {
-    var res = await fetch(API_URL + '?action=listar');
+    var res = await fetch(API_URL+'?action=listar');
     var json = await res.json();
-    if (json.ok) { todosRegistros = json.dados; renderLista(); }
-    else { container.innerHTML = '<div class="empty-state">Erro ao carregar dados.</div>'; }
-  } catch(e) {
-    container.innerHTML = '<div class="empty-state">Erro de conexão.</div>';
-  }
+    if (json.ok) { todosRegistros=json.dados; renderLista(); }
+    else { c.innerHTML='<div class="empty-state">Erro ao carregar dados.</div>'; }
+  } catch(e) { c.innerHTML='<div class="empty-state">Erro de conexão.</div>'; }
 }
 
 function aplicarFiltro() { renderLista(); }
 
 function renderLista() {
   var turma = document.getElementById('filtro-turma').value;
-  var mes = document.getElementById('filtro-mes').value;
-  var container = document.getElementById('lista-container');
-  var filtrados = todosRegistros.filter(function(r) {
-    if (turma && r.turma !== turma) return false;
-    if (mes && r.mes !== mes) return false;
+  var mes   = document.getElementById('filtro-mes').value;
+  var c     = document.getElementById('lista-container');
+  var list  = todosRegistros.filter(function(r){
+    if(turma && r.turma!==turma) return false;
+    if(mes   && r.mes!==mes)     return false;
     return true;
   });
-  if (!filtrados.length) {
-    container.innerHTML = '<div class="empty-state">Nenhum registro encontrado.</div>'; return;
-  }
-  container.innerHTML = filtrados.map(function(r) {
-    return '<div class="record-card" onclick="verDetalhe(\'' + r.id + '\')">' +
-      '<div class="record-header">' +
-        '<span class="record-name">' + r.nome + '</span>' +
-        '<span class="turma-badge">Turma ' + r.turma + '</span>' +
-      '</div>' +
-      '<div class="record-meta">' + r.dias + ' · ' + (r.motivo.length > 50 ? r.motivo.slice(0,50)+'...' : r.motivo) + '</div>' +
-      '<span class="badge ' + (r.atestado==='sim'?'badge-atestado':'badge-sem') + '">' +
-        (r.atestado==='sim'?'Com atestado':'Sem atestado') +
-      '</span></div>';
+  if(!list.length){ c.innerHTML='<div class="empty-state">Nenhum registro encontrado.</div>'; return; }
+  c.innerHTML = list.map(function(r){
+    return '<div class="record-card" onclick="verDetalhe(\''+r.id+'\')">'+
+      '<div class="record-header"><span class="record-name">'+r.nome+'</span><span class="turma-badge">Turma '+r.turma+'</span></div>'+
+      '<div class="record-meta">'+r.dias+' · '+(r.motivo.length>50?r.motivo.slice(0,50)+'...':r.motivo)+'</div>'+
+      '<span class="badge '+(r.atestado==='sim'?'badge-atestado':'badge-sem')+'">'+(r.atestado==='sim'?'Com atestado':'Sem atestado')+'</span></div>';
   }).join('');
 }
 
 function verDetalhe(id) {
   var r = todosRegistros.find(function(x){ return String(x.id)===String(id); });
-  if (!r) return;
+  if(!r) return;
   document.getElementById('detalhe-content').innerHTML =
-    '<div class="detail-card">' +
-      '<div class="detail-name">' + r.nome + '</div>' +
-      '<div class="detail-date">Registrado em ' + (r.data||'–') + '</div>' +
-      '<div class="detail-row"><span class="detail-label">Turma</span><span class="detail-val">' + r.turma + '</span></div>' +
-      '<div class="detail-row"><span class="detail-label">Dias ausente</span><span class="detail-val" style="max-width:65%">' + r.dias + '</span></div>' +
-      '<div class="detail-row"><span class="detail-label">Motivo</span><span class="detail-val" style="max-width:65%">' + r.motivo + '</span></div>' +
-      '<div class="detail-row"><span class="detail-label">Atestado</span><span class="detail-val">' + (r.atestado==='sim'?'✓ Sim':'✗ Não') + '</span></div>' +
-    '</div>' +
-    '<div class="sig-section-title">Assinatura do responsável</div>' +
+    '<div class="detail-card">'+
+      '<div class="detail-name">'+r.nome+'</div>'+
+      '<div class="detail-date">Registrado em '+(r.data||'–')+'</div>'+
+      '<div class="detail-row"><span class="detail-label">Turma</span><span class="detail-val">'+r.turma+'</span></div>'+
+      '<div class="detail-row"><span class="detail-label">Dias ausente</span><span class="detail-val" style="max-width:65%">'+r.dias+'</span></div>'+
+      '<div class="detail-row"><span class="detail-label">Motivo</span><span class="detail-val" style="max-width:65%">'+r.motivo+'</span></div>'+
+      '<div class="detail-row"><span class="detail-label">Atestado</span><span class="detail-val">'+(r.atestado==='sim'?'✓ Sim':'✗ Não')+'</span></div>'+
+    '</div>'+
+    '<div class="sig-section-title">Assinatura do responsável</div>'+
     (r.assinatura
-      ? '<div class="sig-preview"><img src="' + r.assinatura + '" alt="Assinatura"></div>'
+      ? '<div class="sig-preview"><img src="'+r.assinatura+'" alt="Assinatura"></div>'
       : '<div class="no-sig">Assinatura não registrada</div>');
   go('screen-detalhe');
-}
-
-// ── Config ─────────────────────────────────────────────────
-function abrirConfig() {
-  document.getElementById('input-api-url').value = API_URL;
-  document.getElementById('input-school-name').value = SCHOOL_NAME;
-  document.getElementById('modal-config').classList.add('show');
-}
-function fecharConfig() { document.getElementById('modal-config').classList.remove('show'); }
-function salvarConfig() {
-  var url = document.getElementById('input-api-url').value.trim();
-  var nome = document.getElementById('input-school-name').value.trim();
-  if (url) { API_URL = url; localStorage.setItem('api_url', url); document.getElementById('config-banner').classList.remove('show'); carregarStats(); }
-  if (nome) { SCHOOL_NAME = nome; localStorage.setItem('school_name', nome); document.getElementById('school-name-display').textContent = nome; }
-  fecharConfig();
 }
 </script>
 </body>
